@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gravitational Force Visualization</title>
+    <style>
+        canvas {
+            background-color: #f0f0f0;
+            display: block;
+            margin: 20px auto;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gravityCanvas" width="600" height="400"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gravityCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const G = 6.674 * Math.pow(10, -11); // ثابت جهانی گرانش
+
+        // موقعیت و جرم دو جسم
+        const body1 = { x: 150, y: 200, mass: 5.972 * Math.pow(10, 24), radius: 20 };
+        const body2 = { x: 450, y: 200, mass: 7.348 * Math.pow(10, 22), radius: 15 };
+
+        // محاسبه فاصله بین دو جسم
+        const distance = Math.sqrt(Math.pow(body2.x - body1.x, 2) + Math.pow(body2.y - body1.y, 2));
+
+        // محاسبه نیروی گرانش
+        const force = G * (body1.mass * body2.mass) / Math.pow(distance, 2);
+
+        // رسم اجسام
+        function drawBody(body, color) {
+            ctx.beginPath();
+            ctx.arc(body.x, body.y, body.radius, 0, 2 * Math.PI);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        // رسم خط نیروی گرانش
+        function drawForceLine(body1, body2) {
+            ctx.beginPath();
+            ctx.moveTo(body1.x, body1.y);
+            ctx.lineTo(body2.x, body2.y);
+            ctx.strokeStyle = 'red';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.closePath();
+        }
+
+        // رسم تمام عناصر گرافیکی
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBody(body1, 'blue');
+            drawBody(body2, 'green');
+            drawForceLine(body1, body2);
+
+            // نمایش مقدار نیروی گرانش
+            ctx.font = '16px Arial';
+            ctx.fillStyle = 'black';
+            ctx.fillText(`Gravitational Force: ${force.toExponential(2)} N`, 10, 20);
+        }
+
+        draw();
+    </script>
+</body>
+</html>
